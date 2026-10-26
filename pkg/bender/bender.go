@@ -10,6 +10,7 @@ import (
 	"regexp"
 	"sort"
 	"strings"
+	"sync"
 	"time"
 
 	"github.com/8b-is/codewars-cli/pkg/codewars"
@@ -194,30 +195,45 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 	return entry
 }
 
-// EnrichLive queries the Codewars API v1 for each kata that has a CodewarsID.
+// EnrichLive queries the Codewars API v1 concurrently for each kata that has a CodewarsID.
 func EnrichLive(ctx context.Context, client *codewars.Client, entries []KataEntry) {
+	var wg sync.WaitGroup
 	for i := range entries {
 		id := entries[i].CodewarsID
 		if id == "" {
 			continue
 		}
-		ch, err := client.GetCodeChallenge(ctx, id)
-		if err == nil {
-			entries[i].Live = ch
-		}
+		wg.Add(1)
+		go func(idx int, kataID string) {
+			defer wg.Done()
+			ch, err := client.GetCodeChallenge(ctx, kataID)
+			if err == nil {
+				entries[idx].Live = ch
+			}
+		}(i, id)
 	}
+	wg.Wait()
 }
 
-// RunTests executes the verification suites for discovered katas in space-bender.
+// RunTests executes the verification suites concurrently for discovered katas in space-bender.
 func RunTests(ctx context.Context, entries []KataEntry, filter string) []TestResult {
-	var results []TestResult
+	var filtered []KataEntry
 	for _, e := range entries {
 		if filter != "" && !strings.Contains(e.Slug, filter) && !strings.Contains(e.Tier, filter) {
 			continue
 		}
-		res := runSingleTest(ctx, e)
-		results = append(results, res)
+		filtered = append(filtered, e)
 	}
+	results := make([]TestResult, len(filtered))
+	var wg sync.WaitGroup
+	for i, e := range filtered {
+		wg.Add(1)
+		go func(idx int, entry KataEntry) {
+			defer wg.Done()
+			results[idx] = runSingleTest(ctx, entry)
+		}(i, e)
+	}
+	wg.Wait()
 	return results
 }
 
