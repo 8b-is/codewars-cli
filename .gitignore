@@ -3,4 +3,5 @@ dist/
 *.exe
 *.test
 *.out
+.e2e/
 .DS_Store

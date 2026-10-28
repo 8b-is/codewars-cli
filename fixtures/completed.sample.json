@@ -1,0 +1,27 @@
+{
+  "totalPages": 1,
+  "totalItems": 3,
+  "data": [
+    {
+      "id": "57a1d5ef7cb1f3db590002af",
+      "name": "Fibonacci",
+      "slug": "fibonacci",
+      "completedAt": "2026-10-11T12:00:00.000Z",
+      "completedLanguages": ["lambdacalc"]
+    },
+    {
+      "id": "59afff65f1c8274f270020f5",
+      "name": "Spinning Rings",
+      "slug": "spinning-rings",
+      "completedAt": "2026-10-12T18:28:21.825Z",
+      "completedLanguages": ["lambdacalc"]
+    },
+    {
+      "id": "52a78825cdfc2cfc87000005",
+      "name": "Evaluate mathematical expression",
+      "slug": "evaluate-mathematical-expression",
+      "completedAt": "2026-09-02T10:00:00.000Z",
+      "completedLanguages": ["python"]
+    }
+  ]
+}

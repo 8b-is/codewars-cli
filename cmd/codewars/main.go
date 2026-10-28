@@ -16,7 +16,7 @@ import (
 	"github.com/8b-is/codewars-cli/pkg/codewars"
 )
 
-const version = "1.0.0"
+const version = "1.1.0"
 
 func main() {
 	if err := run(os.Args[1:]); err != nil {
@@ -342,11 +342,54 @@ func cmdWebhook(args []string) error {
 	secret := fs.String("secret", os.Getenv("CODEWARS_WEBHOOK_SECRET"), "Optional shared X-Webhook-Secret")
 	enrich := fs.Bool("enrich", true, "Automatically query Codewars API v1 for kata details on code_challenge events")
 	baseURL := fs.String("api-url", "", "Override Codewars API v1 base URL")
+
+	repoDir := fs.String("space-bender", "", "Path to space-bender; enables recording (resolves via SPACE_BENDER_DIR when empty)")
+	user := fs.String("user", envOr("CODEWARS_WEBHOOK_USER", "szepnapot"), "Codewars user to reconcile when recording")
+	record := fs.Bool("record", false, "Record solution_finalized events into the space-bender ledger")
+	commit := fs.Bool("commit", false, "With --record, commit recorded changes with git")
+	dryRun := fs.Bool("dry-run", false, "With --record, report candidates without writing")
+	backfill := fs.Bool("backfill", false, "With --record, reconcile existing completions once at startup")
 	if _, err := parseFlagsInterspersed(fs, args); err != nil {
 		return err
 	}
 
+	resolvedRepo := ""
+	if *record {
+		dir, err := bender.ResolveDir(*repoDir)
+		if err != nil {
+			return fmt.Errorf("--record needs a space-bender checkout: %w", err)
+		}
+		resolvedRepo = dir
+	}
+
 	client := newConfiguredClient(*baseURL)
+
+	recordNow := func(ctx context.Context) *bender.RecordResult {
+		if resolvedRepo == "" {
+			return nil
+		}
+		res, err := bender.RecordCompletions(ctx, client, resolvedRepo, bender.RecordOptions{
+			User:   *user,
+			Commit: *commit,
+			DryRun: *dryRun,
+		})
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "record: %v\n", err)
+			return nil
+		}
+		return res
+	}
+
+	if *backfill && *record {
+		ctx, cancel := context.WithTimeout(context.Background(), 60*time.Second)
+		res := recordNow(ctx)
+		cancel()
+		if res != nil {
+			line, _ := json.Marshal(map[string]any{"backfill": res})
+			fmt.Println(string(line))
+		}
+	}
+
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if r.Method == http.MethodGet && r.URL.Path == "/healthz" {
@@ -392,6 +435,14 @@ func cmdWebhook(args []string) error {
 			}
 		}
 
+		if resolvedRepo != "" && ev.Event == "user" && strings.Contains(ev.Action, "solution") {
+			ctx, cancel := context.WithTimeout(r.Context(), 45*time.Second)
+			if res := recordNow(ctx); res != nil {
+				out["recorded"] = res
+			}
+			cancel()
+		}
+
 		line, _ := json.Marshal(out)
 		fmt.Println(string(line))
 
@@ -400,8 +451,8 @@ func cmdWebhook(args []string) error {
 		_, _ = w.Write(line)
 	})
 
-	fmt.Fprintf(os.Stderr, "Listening for Codewars Hookbot webhooks on http://%s (secret=%v, enrich=%v)\n",
-		*addr, *secret != "", *enrich)
+	fmt.Fprintf(os.Stderr, "Listening for Codewars Hookbot webhooks on http://%s (secret=%v, enrich=%v, record=%v, repo=%s)\n",
+		*addr, *secret != "", *enrich, resolvedRepo != "", resolvedRepo)
 	return http.ListenAndServe(*addr, mux)
 }
 
@@ -616,6 +667,13 @@ func cmdErrors() error {
 		fmt.Fprintf(tw, "%d\t%s\n", code, codewars.StatusExplanation(code))
 	}
 	return tw.Flush()
+}
+
+func envOr(key, fallback string) string {
+	if v := os.Getenv(key); v != "" {
+		return v
+	}
+	return fallback
 }
 
 func parseFlagsInterspersed(fs *flag.FlagSet, args []string) ([]string, error) {

@@ -52,6 +52,35 @@ codewars bender test
 codewars bender scaffold valid-braces --lang python
 ```
 
+## Hookbot → space-bender
+
+The webhook listener can close the loop: when Codewars reports a
+`solution_finalized` event, the CLI reconciles the user's completed katas
+against the local catalogue and records every match in the repository — a
+`LEDGER.md` row plus a `**Platform:** PASS` line in the kata README — then
+commits. Idempotent: re-runs record nothing new.
+
+```bash
+# verify the wiring offline first (mock API, no platform calls)
+node scripts/mock-codewars-api.mjs --port 8801 &
+codewars webhook --record --dry-run --backfill \
+  --api-url http://127.0.0.1:8801 --space-bender ../space-bender
+
+# arm it for real (Codewars Hookbot needs a public URL; tunnel when local)
+codewars webhook --record --commit --backfill \
+  --secret "$CODEWARS_WEBHOOK_SECRET" --user szepnapot --addr 127.0.0.1:8795
+
+# expose it (Hookbot cannot reach localhost):
+#   brew install cloudflared && cloudflared tunnel --url http://127.0.0.1:8795
+# then add the https://… URL + secret at https://www.codewars.com/users/hookbot
+```
+
+Flags: `--space-bender <dir>` (or `SPACE_BENDER_DIR`) enables recording,
+`--record` turns it on, `--commit` writes git commits, `--dry-run` reports
+candidates only, `--backfill` reconciles existing completions once at
+startup, `--user` picks the account (default `szepnapot`, or
+`CODEWARS_WEBHOOK_USER`).
+
 ## Layout
 
 - `cmd/codewars/main.go` — CLI entrypoint (`codewars` / `cw`)
@@ -59,5 +88,7 @@ codewars bender scaffold valid-braces --lang python
 - `pkg/codewars/client.go` — Pure-stdlib HTTP client (`GetUser`, `ListCompletedChallenges`, `ListAllCompletedChallenges`, `ListAuthoredChallenges`, `GetCodeChallenge`)
 - `pkg/codewars/webhook.go` — Codewars Hookbot webhook parser & verifier
 - `pkg/bender/bender.go` — `8b-is/space-bender` discovery, live API enrichment, test runner, and kata scaffolder
+- `pkg/bender/record.go` — Hookbot → repository recorder (`RecordCompletions`, platform ledger, git commits)
+- `scripts/mock-codewars-api.mjs` — offline stand-in for the Codewars API (replay/CI)
 
 *the constellation · 0 + 1 · fine touch from within · vaked.dev*
