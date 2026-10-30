@@ -422,8 +422,10 @@ func cmdBender(args []string) error {
 		return cmdBenderTest(rest)
 	case "scaffold", "new", "pull":
 		return cmdBenderScaffold(rest)
+	case "eli5", "post-eli5", "bluesky", "bsky":
+		return cmdBenderELI5(rest)
 	default:
-		return fmt.Errorf("unknown bender subcommand %q (expected: list | test | scaffold)", sub)
+		return fmt.Errorf("unknown bender subcommand %q (expected: list | test | scaffold | eli5)", sub)
 	}
 }
 
@@ -607,6 +609,62 @@ func cmdBenderScaffold(args []string) error {
 	}
 
 	fmt.Printf("Scaffolded %q (%s) into %s\n", ch.Name, ch.ID, createdDir)
+	return nil
+}
+
+func cmdBenderELI5(args []string) error {
+	fs := flag.NewFlagSet("bender eli5", flag.ContinueOnError)
+	dir := fs.String("dir", "", "Path to local 8b-is/space-bender repository")
+	dryRun := fs.Bool("dry-run", false, "Preview the 4-post ELI5 thread without posting to Bluesky")
+	asJSON := fs.Bool("json", false, "Output JSON receipt")
+	posArgs, err := parseFlagsInterspersed(fs, args)
+	if err != nil {
+		return err
+	}
+	if len(posArgs) < 1 {
+		return fmt.Errorf("usage: codewars bender eli5 <slug> [--dry-run] [--json]")
+	}
+	slug := posArgs[0]
+
+	repoDir, err := bender.ResolveDir(*dir)
+	if err != nil {
+		return err
+	}
+	entries, err := bender.DiscoverKatas(repoDir)
+	if err != nil {
+		return err
+	}
+
+	var target *bender.KataEntry
+	for i := range entries {
+		if entries[i].Slug == slug {
+			target = &entries[i]
+			break
+		}
+	}
+	if target == nil {
+		return fmt.Errorf("kata slug %q not found in %s", slug, repoDir)
+	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	receipt, err := bender.PostELI5Thread(ctx, *target, nil, *dryRun)
+	if err != nil {
+		return err
+	}
+
+	if *asJSON {
+		return printJSON(receipt)
+	}
+
+	fmt.Printf("Bluesky ELI5 Thread for %s (%s) — @%s\n", receipt.KataSlug, receipt.Tier, receipt.Handle)
+	if receipt.RootURL != "" {
+		fmt.Printf("Root URL: %s\n\n", receipt.RootURL)
+	}
+	for _, p := range receipt.Posts {
+		fmt.Printf("[%d/%d] %s\n%s\n\n", p.Index, len(receipt.Posts), p.URL, p.Text)
+	}
 	return nil
 }
 

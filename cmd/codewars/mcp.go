@@ -180,6 +180,24 @@ func mcpToolsSchema() []map[string]any {
 			},
 		},
 		{
+			"name":        "bender_post_eli5",
+			"description": "Publish a multipost ELI5 educational Bluesky thread (with GitHub links) for a solved kata in 8b-is/space-bender and save bluesky-receipt.json.",
+			"inputSchema": map[string]any{
+				"type": "object",
+				"properties": map[string]any{
+					"slug": map[string]any{
+						"type":        "string",
+						"description": "Kata directory slug (e.g. 'google-interview').",
+					},
+					"dry_run": map[string]any{
+						"type":        "boolean",
+						"description": "If true, preview the ELI5 thread without posting live to Bluesky.",
+					},
+				},
+				"required": []string{"slug"},
+			},
+		},
+		{
 			"name":        "codewars_kata",
 			"description": "Query Codewars API v1 GET /api/v1/code-challenges/{challenge} by ID, slug, or URL.",
 			"inputSchema": map[string]any{
@@ -286,6 +304,29 @@ func dispatchMCPTool(name string, args map[string]any, defaultDir, baseURL strin
 					"solution": string(solBytes),
 					"readme":   string(readmeBytes),
 				}, nil
+			}
+		}
+		return nil, fmt.Errorf("kata slug %q not found in %s", slug, repoDir)
+
+	case "bender_post_eli5":
+		slug, _ := args["slug"].(string)
+		if slug == "" {
+			return nil, fmt.Errorf("missing required parameter 'slug'")
+		}
+		dryRun, _ := args["dry_run"].(bool)
+		repoDir, err := bender.ResolveDir(defaultDir)
+		if err != nil {
+			return nil, err
+		}
+		entries, err := bender.DiscoverKatas(repoDir)
+		if err != nil {
+			return nil, err
+		}
+		for _, e := range entries {
+			if e.Slug == slug {
+				ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+				defer cancel()
+				return bender.PostELI5Thread(ctx, e, nil, dryRun)
 			}
 		}
 		return nil, fmt.Errorf("kata slug %q not found in %s", slug, repoDir)
