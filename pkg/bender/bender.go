@@ -19,6 +19,7 @@ import (
 // KnownKataIDs maps space-bender local directory slugs to canonical Codewars API kata IDs.
 var KnownKataIDs = map[string]string{
 	"express-number-as-sum-of-four-squares": "63022799acfb8d00285b4ea0",
+	"game-of-life-in-reverse":               "5ea6a8502186ab001427809e",
 	"evaluate-math":         "52a78825cdfc2cfc87000005",
 	"simpler-interpreter":   "53005a7b26d12be55c000243",
 	"regexp-parser":         "5470c635304c127cad000f0d",

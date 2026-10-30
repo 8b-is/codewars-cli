@@ -96,9 +96,16 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 	case "negabinary":
 		return []string{
 			fmt.Sprintf("➖2️⃣ ELI5 Kata · NegaBinary (λ-Calculus, 2 kyu)\n\nIn base -2 (used in 1950s Polish BINEG computers!), every bit multiplies by -2 (`E x = -2x`, `O x = 1 - 2x`), representing + and - numbers with NO sign bit!\n\n%s", kataURL),
-			"🪞 ELI5 Step 1 (1-Step Sign-Flip Unrolling):\n\nBecause multiplying by -2 flips the sign at every bit:\n• `pred (E x) = O (succ x)` & `pred (O x) = mkE x`\n• `lt0 n` is just `gt0` of the tail!\n• `hlf n = n Zero neg neg` (floor ÷2 in 1 line)!\nZero mutual-recursion forward refs needed!",
+			"🪞 ELI5 Step 1 (1-Step Sign-Flip Unrolling):\n\nBecause multiplying by -2 flips the sign at every bit:\n• `pred (E x) = O (succ x)` & `pred (O x) = mkE x` \n• `lt0 n` is just `gt0` of the tail!\n• `hlf n = n Zero neg neg` (floor ÷2 in 1 line)!\nZero mutual-recursion forward refs needed!",
 			"➗ ELI5 Step 2 (BinaryScott Bridge & Deferred `()`):\n\nIn base -2, `mul` needs no subtraction (`(1-2x)n = n + E(x*n)`).\nFor `div`, `mod`, `gcd`, `lcm`, we bridge `|m|, |n|` in O(log n) to unsigned `BinaryScott` long division and wrap error `()` in `\\_.()`!",
 			fmt.Sprintf("✅ All 47 exports & 49 test suites verified in ~730 ms (vs 5s limit)!\n\n%s\nRepo: %s\n\n#LambdaCalculus #Codewars #ELI5", solURL, repoURL),
+		}
+	case "game-of-life-in-reverse":
+		return []string{
+			fmt.Sprintf("🧬 ELI5 Kata · Game of Life in Reverse (Factor, 1 kyu)\n\nStepping Conway's Game of Life forward is easy, but how do you run time BACKWARDS to find a predecessor (or prove a pattern is a Garden of Eden)?\n\n%s", kataURL),
+			"🎯 ELI5 Step 1 (Interval Feasibility Bounds):\n\nEach cell tracks its placed live neighbors `c` and remaining unplaced neighbors `r`.\n• Need 1 next gen? Valid iff `c <= 3` and `c + r + s >= 3`\n• Need 0 next gen? Valid iff `c + s < 3` or `c + r > 3`\nDead branches prune immediately!",
+			"🪟 ELI5 Step 2 (4-Bit Sliding Frontier Profile DP):\n\nIn raster order, only the last `W + 1` cells still touch future cells.\nPacking `(min(c, 4), s)` into 4 bits per frontier cell gives one integer key cached in a Factor hash-set (`?adjoin`), never repeating dead-ends!",
+			fmt.Sprintf("✅ Verified across 55 grids + Garden of Eden in Factor 0.102!\n\n%s\nRepo: %s\n\n#Factor #GameOfLife #Codewars #ELI5", solURL, repoURL),
 		}
 	default:
 		return []string{
