@@ -23,6 +23,7 @@ var KnownKataIDs = map[string]string{
 	"regexp-parser":         "5470c635304c127cad000f0d",
 	"prime-streaming":       "59122604e5bc240817000016",
 	"divisible-by-7":        "56a73d2194505c29f600002d",
+	"church-infix-all-ops":  "6246448922c354000f0efbb8",
 	"loopover":              "5c1d796370fee68b1e000611",
 	"circular-genome":       "5f0bddf9a5500c0010fca854",
 	"basics-08-next-higher":    "5a6b80cb880385a8f7000089",

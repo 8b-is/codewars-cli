@@ -72,6 +72,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🔑 ELI5 Step 2 (The Sliding Window Invariant):\n\nGeneralize the window to ANY adjacent Fibonacci pair (fib k, fib (S k)):\n`fib_aux (fib k) (fib (S k)) n = fib (n + k)`!\nOne step shifts `(fib k, fib (S k))` to `(fib (S k), fib (S (S k)))` — matching `IHn (S k)`!",
 			fmt.Sprintf("✅ Plugging in k = 0 gives fib_aux (fib 0) (fib 1) n = fib (n + 0) = fib n with 0 axioms!\n\nCoq: %s\nRepo: %s\n\n#Coq #HoTT #Codewars #ELI5", solURL, repoURL),
 		}
+	case "church-infix-all-ops":
+		return []string{
+			fmt.Sprintf("λ ELI5 Kata · Church Infix All Operations (2 kyu)\n\nHow do `2 a d d 3 = 5`, `5 s u b 4 = 1`, `3 m u l 4 = 12`, `5 d i v 2 = 2`, `7 m o d 4 = 3`, `2 p o w 3 = 8` work in λ-calculus where each letter is a combinator?\n\n%s", kataURL),
+			"🧩 ELI5 Step 1 (How Infix Spelling Works):\n\nIn λ-calculus, `x c1 c2 c3 y` means `(((x c1) c2) c3) y`!\nSince `x` is a Church numeral (\"do c1 x times starting from c2\"), `x c1 c2` counts `x` steps, and then hands `x` to the 3rd letter `c3` and `y`!",
+			"🎭 ELI5 Step 2 (The Triple Agent Letter `d`):\n\n11 of the 12 letters only sit in one slot (`c1`, `c2`, or `c3`).\nOnly `d` is a triple agent:\n• `0 a d d y` → `d d y = y`\n• `x d i v y` → `(d^x i) v y = div x y`\n• `x m o d y` → `(x m o) d y = mod x y`\n\n`d = \\p. p A` solves all 3!",
+			fmt.Sprintf("✅ Verified across 626 Church numeral tests (`0 pow 0 = 1`, `add`, `sub`, `mul`, `div`, `mod`, `pow`)!\n\nλ: %s\nRepo: %s\n\n#LambdaCalculus #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
