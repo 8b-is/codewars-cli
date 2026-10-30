@@ -114,6 +114,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"⚡ ELI5 Step 2 (Bidirectional Bitmask Pruning):\n\nAt each DFS state `(u, visited)`, hardware `trailing_zeros()` bit-scans flood-fill:\n1. `can_reach_s` backwards from `S` through unvisited tiles\n2. `reachable` forwards from `u` inside `can_reach_s`\nPruning dead ends & upper bounds in O(1)!",
 			fmt.Sprintf("✅ Verified across 100 random 5x5 mazes in ~26 ms in Rust!\n\n%s\nRepo: %s\n\n#Rust #GraphTheory #Codewars #ELI5", solURL, repoURL),
 		}
+	case "break-the-pieces":
+		return []string{
+			fmt.Sprintf("🧩 ELI5 Kata · Break the pieces (C++, 2 kyu)\n\nGiven an ASCII blueprint of nested rooms (+, -, |, spaces), how do we slice out every minimal closed room and heal its shared walls?\n\n%s", kataURL),
+			"🌊 ELI5 Step 1 (Pouring Water Outside):\n\nFirst, pad the blueprint with a 1-space border and flood-fill from `(0, 0)`.\nEvery space the water reaches is \"outside\".\nEach dry pocket of spaces left inside is a minimal closed room!",
+			"🧱 ELI5 Step 2 (8-Neighbor Walls & Corner Healing):\n\nWalk the 8-neighbors of a room's dry spaces to collect its wall cells (`bnd_stamp`).\nDid a `+` T-junction belong to a neighbor's wall? If it only has horizontal neighbors in THIS room's wall, it heals to `-` (or `|` for vertical)!",
+			fmt.Sprintf("✅ Verified in C++20 across nested donuts, interlocking L-rooms & classic grids!\n\n%s\nRepo: %s\n\n#CPP #ASCII #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),

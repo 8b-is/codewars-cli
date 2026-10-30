@@ -28,6 +28,7 @@ var KnownKataIDs = map[string]string{
 	"church-infix-all-ops":                "6246448922c354000f0efbb8",
 	"negabinary":                          "68afa8133e3f243480fed90a",
 	"ascii-games-dance-dance-evolution-i": "58f58dc3663082a4ba000033",
+	"break-the-pieces":                    "527fde8d24b9309d9b000c4e",
 	"loopover":              "5c1d796370fee68b1e000611",
 	"circular-genome":       "5f0bddf9a5500c0010fca854",
 	"hamming-numbers":       "526d84b98f428f14a60008da",
