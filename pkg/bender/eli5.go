@@ -107,6 +107,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🪟 ELI5 Step 2 (4-Bit Sliding Frontier Profile DP):\n\nIn raster order, only the last `W + 1` cells still touch future cells.\nPacking `(min(c, 4), s)` into 4 bits per frontier cell gives one integer key cached in a Factor hash-set (`?adjoin`), never repeating dead-ends!",
 			fmt.Sprintf("✅ Verified across 55 grids + Garden of Eden in Factor 0.102!\n\n%s\nRepo: %s\n\n#Factor #GameOfLife #Codewars #ELI5", solURL, repoURL),
 		}
+	case "ascii-games-dance-dance-evolution-i":
+		return []string{
+			fmt.Sprintf("🕺 ELI5 Kata · Dance Dance Evolution I (Rust, 2 kyu)\n\nOn an arrow grid (←↖↑↗→↘↓↙), each step must stay ≤90° from BOTH your current & target arrows. How do we find the longest cycle back to S?\n\n%s", kataURL),
+			"🧭 ELI5 Step 1 (The 90° Compass Rule):\n\nNumber the 8 directions 0..7 around the compass (45° per step).\nTwo directions are ≤ 90° apart iff `diff <= 2 || diff >= 6`.\nWe precompile all valid transitions into 64-bit adjacency masks `out_mask[u]` & `in_mask[v]`!",
+			"⚡ ELI5 Step 2 (Bidirectional Bitmask Pruning):\n\nAt each DFS state `(u, visited)`, hardware `trailing_zeros()` bit-scans flood-fill:\n1. `can_reach_s` backwards from `S` through unvisited tiles\n2. `reachable` forwards from `u` inside `can_reach_s`\nPruning dead ends & upper bounds in O(1)!",
+			fmt.Sprintf("✅ Verified across 100 random 5x5 mazes in ~26 ms in Rust!\n\n%s\nRepo: %s\n\n#Rust #GraphTheory #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
