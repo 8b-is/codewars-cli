@@ -29,6 +29,7 @@ var KnownKataIDs = map[string]string{
 	"number-pairs":          "563b1f55a5f2079dc100008a",
 	"fibonacci":             "57a1d5ef7cb1f3db590002af",
 	"spinning-rings":        "59afff65f1c8274f270020f5",
+	"google-interview":      "5c85201e20f73f08df4216b1",
 }
 
 // KataEntry describes a kata inside the paired 8b-is/space-bender repository.
@@ -174,6 +175,8 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 				entry.Language = "python"
 			case ".lc":
 				entry.Language = "lambda-calculus"
+			case ".idr":
+				entry.Language = "idris"
 			case ".hx":
 				entry.Language = "haxe"
 			case ".go":
@@ -374,6 +377,10 @@ func languageTemplates(lang, slug string) (ext, testFile, solStub, testStub stri
 		return "lc", "test.mjs",
 			fmt.Sprintf("# %s (lambda-calculus)\nid = \\ x . x\n", slug),
 			"import assert from \"node:assert/strict\";\nconsole.log(\"ALL PASS\");\n"
+	case "idr", "idris":
+		return "idr", "test_solution.py",
+			fmt.Sprintf("module P\n\n%%access export\n%%default total\n"),
+			"if __name__ == \"__main__\":\n    print(\"ALL TESTS PASS\")\n"
 	case "go", "golang":
 		return "go", "solution_test.go",
 			"package kata\n\nfunc Solve() int {\n\treturn 0\n}\n",

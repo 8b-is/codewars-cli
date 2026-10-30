@@ -47,6 +47,8 @@ func run(args []string) error {
 		return cmdWebhook(rest)
 	case "bender", "space-bender", "sb", "b":
 		return cmdBender(rest)
+	case "mcp":
+		return cmdMCP(rest)
 	case "errors", "err":
 		return cmdErrors()
 	case "version", "-v", "--version":
@@ -701,8 +703,11 @@ Usage:
   codewars bender test [--dir <path>] [--filter <slug_or_tier>] [--json]
       Run all verification suites across 8b-is/space-bender (Python + @codewars/lambda-calculus).
 
-  codewars bender scaffold <id_or_slug_or_url> [--dir <path>] [--lang python|lc|go] [--slug <name>]
+  codewars bender scaffold <id_or_slug_or_url> [--dir <path>] [--lang python|lc|idr|go] [--slug <name>]
       Fetch kata from Codewars API v1 and scaffold katas/<kyu>/<slug> in 8b-is/space-bender.
+
+  codewars mcp [--dir <path>]
+      Run JSON-RPC 2.0 stdio MCP server for 8b-is/space-bender + Codewars API v1.
 
   codewars errors
       Print the official Codewars API v1 HTTP error status code table (400..503).
