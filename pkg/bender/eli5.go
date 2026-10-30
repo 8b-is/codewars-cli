@@ -93,6 +93,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"⚡ ELI5 Step 2 (Parity Lock + Stack Montgomery):\n\nMatching `(a, b)` parities to `n mod 4` forces `p = n - a² - b² ≡ 1 (mod 4)` every time!\n96 small primes filter 85% of steps in `u32`, and stack `[u64; 5]` Montgomery Miller-Rabin + Cornacchia finds `c² + d² = p` with 0 heap allocs!",
 			fmt.Sprintf("✅ All 20×2^128 + 20×2^1024 random tests solved in ~7.2 ms total in Rust!\n\n%s\nRepo: %s\n\n#Rust #NumberTheory #Codewars #ELI5", solURL, repoURL),
 		}
+	case "negabinary":
+		return []string{
+			fmt.Sprintf("➖2️⃣ ELI5 Kata · NegaBinary (λ-Calculus, 2 kyu)\n\nIn base -2 (used in 1950s Polish BINEG computers!), every bit multiplies by -2 (`E x = -2x`, `O x = 1 - 2x`), representing + and - numbers with NO sign bit!\n\n%s", kataURL),
+			"🪞 ELI5 Step 1 (1-Step Sign-Flip Unrolling):\n\nBecause multiplying by -2 flips the sign at every bit:\n• `pred (E x) = O (succ x)` & `pred (O x) = mkE x`\n• `lt0 n` is just `gt0` of the tail!\n• `hlf n = n Zero neg neg` (floor ÷2 in 1 line)!\nZero mutual-recursion forward refs needed!",
+			"➗ ELI5 Step 2 (BinaryScott Bridge & Deferred `()`):\n\nIn base -2, `mul` needs no subtraction (`(1-2x)n = n + E(x*n)`).\nFor `div`, `mod`, `gcd`, `lcm`, we bridge `|m|, |n|` in O(log n) to unsigned `BinaryScott` long division and wrap error `()` in `\\_.()`!",
+			fmt.Sprintf("✅ All 47 exports & 49 test suites verified in ~730 ms (vs 5s limit)!\n\n%s\nRepo: %s\n\n#LambdaCalculus #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
