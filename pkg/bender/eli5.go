@@ -58,6 +58,20 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🌿 ELI5 Step 2 (The Branch):\n\nFor Branch(x, L, R):\n• 1st flip swaps children → Branch(x, flip R, flip L)\n• 2nd flip swaps them back → Branch(x, flip(flip L), flip(flip R))\n\nBy induction, L & R bounce back to themselves, and `congBranch x (flipTreeSym l) (flipTreeSym r)` seals the proof!",
 			fmt.Sprintf("✅ Totality checked (`%%default total`) & verified across 1,370 binary trees!\n\nIdris 1.3 proof: %s\nRepo: %s\n\n#Idris #Codewars #TheoremProving #ELI5", solURL, repoURL),
 		}
+	case "a-plus-a-equals-b-plus-b":
+		return []string{
+			fmt.Sprintf("⚖️ ELI5 Kata · A+A = B+B → A = B (Coq, 6 kyu)\n\nImagine two kids with identical twin stacks of LEGO bricks: Alice has A+A bricks and Bob has B+B. If their total towers are equal height, must A equal B?\n\nCoq proof: %s", kataURL),
+			"🧱 ELI5 Step 1 (Peeling 2 Bricks at a Time):\n\nIn Peano arithmetic, numbers are built from 0 and S (\"one more brick\").\nIf Alice has 0 bricks and Bob has at least 1 (`S b`), `0 = S (...)` is impossible (`discriminate H`)!\nIf both have 0, `0 = 0` (`reflexivity`)!",
+			"🔄 ELI5 Step 2 (The S(a)+S(a) Twist):\n\nWhat if both have at least 1 brick (`S a` and `S b`)?\n`(S a) + (S a)` simplifies on the left to `S (a + S a)`.\nOur helper lemma `add_succ_r` pulls the second `S` out to the front: `S (S (a + a)) = S (S (b + b))`!",
+			fmt.Sprintf("✅ Peeling off both outer `S` bricks (`inversion H`) gives `a + a = b + b`, so induction (`IHa`) seals it with 0 axioms!\n\nCoq: %s\nRepo: %s\n\n#Coq #HoTT #Codewars #ELI5", solURL, repoURL),
+		}
+	case "fibonacci-verification":
+		return []string{
+			fmt.Sprintf("🐚 ELI5 Kata · Program Verification #2: Fibonacci (Coq, 6 kyu)\n\nNaive fib(n) branches into 2^n calls, while fib2(n) = fib_aux 0 1 n walks in O(n) with a 2-number sliding window. How do we prove fib2 n = fib n?\n\n%s", kataURL),
+			"🪟 ELI5 Step 1 (Why Direct Induction Gets Stuck):\n\nIf you induct directly on fib_aux 0 1 n, the very first step changes (0, 1) into (1, 1), then (1, 2), then (2, 3)!\nYour induction hypothesis only knows about (0, 1), so it can't match (1, 1).",
+			"🔑 ELI5 Step 2 (The Sliding Window Invariant):\n\nGeneralize the window to ANY adjacent Fibonacci pair (fib k, fib (S k)):\n`fib_aux (fib k) (fib (S k)) n = fib (n + k)`!\nOne step shifts `(fib k, fib (S k))` to `(fib (S k), fib (S (S k)))` — matching `IHn (S k)`!",
+			fmt.Sprintf("✅ Plugging in k = 0 gives fib_aux (fib 0) (fib 1) n = fib (n + 0) = fib n with 0 axioms!\n\nCoq: %s\nRepo: %s\n\n#Coq #HoTT #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
