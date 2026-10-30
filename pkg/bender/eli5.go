@@ -86,6 +86,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🚀 ELI5 Step 2 (Zero `mul` Instructions in x86-64):\n\nIn NASM we never even call `mul`!\n• `×2`: `add r10, r10`\n• `×3`: `lea r11, [r11 + r11*2]`\n• `×5`: `lea rdi, [rdi + rdi*4]`\n• `min`: branchless `cmovb` (unsigned `<`, crucial once values pass 2^63)!",
 			fmt.Sprintf("✅ Cached in `.bss` on call #1, so all 13,282 calls take 6 instructions (`hamming(13282) = 18432000000000000000`)!\n\n%s\nRepo: %s\n\n#NASM #x86_64 #Codewars #ELI5", solURL, repoURL),
 		}
+	case "express-number-as-sum-of-four-squares":
+		return []string{
+			fmt.Sprintf("🦀 ELI5 Kata · Sum of Four Squares (Rust, 1 kyu)\n\nLagrange proved every number N = a² + b² + c² + d².\nHow do we decompose huge 1024-bit numbers in ~0.25 ms each in pure Rust without GMP?\n\n%s", kataURL),
+			"🪆 ELI5 Step 1 (The Double-Sqrt Cascade):\n\nInstead of testing 1024-bit primes:\n1. Pick `a ≈ √n` (512 bits) → remainder `r1 = n - a²` shrinks to ~513 bits!\n2. Pick `b ≈ √r1` (257 bits) → remainder `p = r1 - b²` shrinks to ~258 bits (`[u64; 5]`)!",
+			"⚡ ELI5 Step 2 (Parity Lock + Stack Montgomery):\n\nMatching `(a, b)` parities to `n mod 4` forces `p = n - a² - b² ≡ 1 (mod 4)` every time!\n96 small primes filter 85% of steps in `u32`, and stack `[u64; 5]` Montgomery Miller-Rabin + Cornacchia finds `c² + d² = p` with 0 heap allocs!",
+			fmt.Sprintf("✅ All 20×2^128 + 20×2^1024 random tests solved in ~7.2 ms total in Rust!\n\n%s\nRepo: %s\n\n#Rust #NumberTheory #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
