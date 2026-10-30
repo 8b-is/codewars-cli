@@ -26,6 +26,7 @@ var KnownKataIDs = map[string]string{
 	"church-infix-all-ops":  "6246448922c354000f0efbb8",
 	"loopover":              "5c1d796370fee68b1e000611",
 	"circular-genome":       "5f0bddf9a5500c0010fca854",
+	"hamming-numbers":       "526d84b98f428f14a60008da",
 	"basics-08-next-higher":    "5a6b80cb880385a8f7000089",
 	"a-plus-a-equals-b-plus-b": "5c8531a820089d04385a7faa",
 	"fibonacci-verification":   "5c8b3e55b9d1190016bd3cca",
@@ -182,6 +183,8 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 				entry.Language = "idris"
 			case ".v":
 				entry.Language = "coq"
+			case ".asm":
+				entry.Language = "nasm"
 			case ".hx":
 				entry.Language = "haxe"
 			case ".go":

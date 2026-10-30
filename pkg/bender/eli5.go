@@ -79,6 +79,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🎭 ELI5 Step 2 (The Triple Agent Letter `d`):\n\n11 of the 12 letters only sit in one slot (`c1`, `c2`, or `c3`).\nOnly `d` is a triple agent:\n• `0 a d d y` → `d d y = y`\n• `x d i v y` → `(d^x i) v y = div x y`\n• `x m o d y` → `(x m o) d y = mod x y`\n\n`d = \\p. p A` solves all 3!",
 			fmt.Sprintf("✅ Verified across 626 Church numeral tests (`0 pow 0 = 1`, `add`, `sub`, `mul`, `div`, `mod`, `pow`)!\n\nλ: %s\nRepo: %s\n\n#LambdaCalculus #Codewars #ELI5", solURL, repoURL),
 		}
+	case "hamming-numbers":
+		return []string{
+			fmt.Sprintf("⚙️ ELI5 Kata · Hamming Numbers (NASM x86-64, 4 kyu)\n\nHamming numbers use only prime factors 2, 3, 5 (2^i·3^j·5^k): 1, 2, 3, 4, 5, 6, 8, 9, 10, 12...\nHow do we compute all 13,282 64-bit Hamming numbers in 141 bytes of NASM?\n\n%s", kataURL),
+			"🏭 ELI5 Step 1 (Three Conveyor Belts):\n\nImagine 3 machines reading already-found Hamming numbers:\n• Machine 2 doubles them (`i2`)\n• Machine 3 triples them (`i3`)\n• Machine 5×5s them (`i5`)\nEach step picks `min(x2, x3, x5)` and steps whichever belt(s) tied for smallest!",
+			"🚀 ELI5 Step 2 (Zero `mul` Instructions in x86-64):\n\nIn NASM we never even call `mul`!\n• `×2`: `add r10, r10`\n• `×3`: `lea r11, [r11 + r11*2]`\n• `×5`: `lea rdi, [rdi + rdi*4]`\n• `min`: branchless `cmovb` (unsigned `<`, crucial once values pass 2^63)!",
+			fmt.Sprintf("✅ Cached in `.bss` on call #1, so all 13,282 calls take 6 instructions (`hamming(13282) = 18432000000000000000`)!\n\n%s\nRepo: %s\n\n#NASM #x86_64 #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
