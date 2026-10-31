@@ -128,6 +128,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"⚡ ELI5 Step 2 (Haskell `Seq` BFS + 12-Bit Assembly Moat):\n\nIn Haskell (`solution.hs`), `Data.Sequence` BFS finds the shortest path.\nIn x86-64 NASM & ARM64 (`solution.asm`, `solution_arm64.s`), a 32×32 zero-moat grid packs `(orient << 10) | idx` into 12 bits with branchless LUT rolls!",
 			fmt.Sprintf("✅ Verified in Haskell (GHC) + x86-64 NASM + Apple Silicon ARM64!\n\n%s\nRepo: %s\n\n#Haskell #Assembly #Codewars #ELI5", solURL, repoURL),
 		}
+	case "range-extraction":
+		return []string{
+			fmt.Sprintf("📏 ELI5 Kata · Range Extraction (Haskell + Julia + ASM, 4 kyu)\n\nHow do we compress `[-6,-3,-2,-1,0,1,3,4,5]` into `\"-6,-3-1,3-5\"` where only runs of 3+ consecutive integers become `a-b`?\n\n%s", kataURL),
+			"🔍 ELI5 Step 1 (The 3-Number Rule):\n\nWalk consecutive neighbors `y == prev + 1` from `a` to `b`:\n• Span `b - a >= 2` (3+ numbers): collapse to `\"a-b\"`\n• Span `b - a == 1` (just 2 numbers): keep separate `\"a,b\"`\n• Span `0` (single number): emit `\"a\"`!",
+			"⚡ ELI5 Step 2 (Haskell + Julia + Zero-Libc Assembly):\n\n• Haskell (`solution.hs`): `spanRun` + `intercalate \",\"`\n• Julia (`solution.jl`): two-pointer run scanner\n• x86-64 NASM & ARM64 (`solution.asm`, `solution_arm64.s`): pure register `div`/`udiv` ASCII digit streamer!",
+			fmt.Sprintf("✅ Verified across Haskell (GHC 9.14), Julia 1.13, x86-64 NASM & ARM64!\n\n%s\nRepo: %s\n\n#Haskell #JuliaLang #Assembly #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),

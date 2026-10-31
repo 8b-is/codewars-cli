@@ -32,7 +32,8 @@ var KnownKataIDs = map[string]string{
 	"loopover":                             "5c1d796370fee68b1e000611",
 	"circular-genome":                      "5f0bddf9a5500c0010fca854",
 	"bloxorz-solver":                       "5a2a597a8882f392020005e5",
-	"hamming-numbers":       "526d84b98f428f14a60008da",
+	"hamming-numbers":                      "526d84b98f428f14a60008da",
+	"range-extraction":                     "51ba717bb08c1cd60f00002f",
 	"basics-08-next-higher":    "5a6b80cb880385a8f7000089",
 	"a-plus-a-equals-b-plus-b": "5c8531a820089d04385a7faa",
 	"fibonacci-verification":   "5c8b3e55b9d1190016bd3cca",
@@ -212,6 +213,8 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 				entry.Language = "rust"
 			case ".hs":
 				entry.Language = "haskell"
+			case ".jl":
+				entry.Language = "julia"
 			case ".js", ".mjs":
 				entry.Language = "javascript"
 			default:
