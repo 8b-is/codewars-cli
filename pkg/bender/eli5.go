@@ -121,6 +121,13 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"🧱 ELI5 Step 2 (8-Neighbor Walls & Corner Healing):\n\nWalk the 8-neighbors of a room's dry spaces to collect its wall cells (`bnd_stamp`).\nDid a `+` T-junction belong to a neighbor's wall? If it only has horizontal neighbors in THIS room's wall, it heals to `-` (or `|` for vertical)!",
 			fmt.Sprintf("✅ Verified in C++20 across nested donuts, interlocking L-rooms & classic grids!\n\n%s\nRepo: %s\n\n#CPP #ASCII #Codewars #ELI5", solURL, repoURL),
 		}
+	case "bloxorz-solver":
+		return []string{
+			fmt.Sprintf("🧱 ELI5 Kata · Bloxorz Solver (Haskell + ASM, 3 kyu)\n\nHow do you roll a 1×1×2 block across a floating island from B into the square hole X in the fewest moves without tipping over the edge?\n\n%s", kataURL),
+			"🎲 ELI5 Step 1 (3 Poses of a Domino Block):\n\nAt any moment the block has 1 of 3 poses:\n• `Upright r c`: standing tall on 1 tile\n• `Horz r c`: lying flat across `(r, c)` & `(r, c+1)`\n• `Vert r c`: lying flat across `(r, c)` & `(r+1, c)`\nTipping upright shifts 2 tiles; rolling flat shifts 1!",
+			"⚡ ELI5 Step 2 (Haskell `Seq` BFS + 12-Bit Assembly Moat):\n\nIn Haskell (`solution.hs`), `Data.Sequence` BFS finds the shortest path.\nIn x86-64 NASM & ARM64 (`solution.asm`, `solution_arm64.s`), a 32×32 zero-moat grid packs `(orient << 10) | idx` into 12 bits with branchless LUT rolls!",
+			fmt.Sprintf("✅ Verified in Haskell (GHC) + x86-64 NASM + Apple Silicon ARM64!\n\n%s\nRepo: %s\n\n#Haskell #Assembly #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
