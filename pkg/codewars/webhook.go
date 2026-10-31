@@ -86,8 +86,9 @@ func ParseWebhookRequest(r *http.Request, expectedSecret string) (*WebhookEvent,
 	}
 
 	var raw map[string]any
-	_ = json.Unmarshal(body, &raw)
-	ev.Raw = raw
+	if err := json.Unmarshal(body, &raw); err == nil {
+		ev.Raw = raw
+	}
 
 	eventHeader := r.Header.Get("X-Webhook-Event")
 	if eventHeader != "" {
