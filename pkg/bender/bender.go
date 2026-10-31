@@ -48,6 +48,7 @@ type KataEntry struct {
 	Title        string                  `json:"title"`
 	CodewarsID   string                  `json:"codewarsId,omitempty"`
 	SolutionFile string                  `json:"solutionFile"`
+	AsmFile      string                  `json:"asmFile,omitempty"`
 	TestFile     string                  `json:"testFile,omitempty"`
 	Language     string                  `json:"language"`
 	Dir          string                  `json:"dir"`
@@ -176,9 +177,21 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 	for _, f := range files {
 		name := f.Name()
 		switch {
+		case name == "solution_test.go":
+			if entry.TestFile == "" {
+				entry.TestFile = name
+			}
 		case strings.HasPrefix(name, "solution."):
-			entry.SolutionFile = name
 			ext := filepath.Ext(name)
+			if ext == ".asm" || ext == ".s" {
+				entry.AsmFile = name
+				if entry.SolutionFile == "" {
+					entry.SolutionFile = name
+					entry.Language = "nasm"
+				}
+				continue
+			}
+			entry.SolutionFile = name
 			switch ext {
 			case ".py":
 				entry.Language = "python"
@@ -201,7 +214,7 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 			default:
 				entry.Language = strings.TrimPrefix(ext, ".")
 			}
-		case name == "test_solution.py" || name == "test.mjs" || name == "solution_test.go" || name == "test.hx":
+		case name == "test_solution.py" || name == "test.mjs" || name == "test.hx":
 			if entry.TestFile == "" || name == "test_solution.py" || name == "test.mjs" {
 				entry.TestFile = name
 			}
