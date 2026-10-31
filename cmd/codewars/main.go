@@ -69,6 +69,10 @@ func newConfiguredClient(baseURL string) *codewars.Client {
 	} else if env := os.Getenv("CODEWARS_API_URL"); env != "" {
 		c.BaseURL = env
 	}
+	// Ensure trailing slash for BaseURL if not present to prevent path joining issues
+	if c.BaseURL != "" && !strings.HasSuffix(c.BaseURL, "/") {
+		c.BaseURL += "/"
+	}
 	if key := os.Getenv("CODEWARS_API_KEY"); key != "" {
 		c.APIKey = key
 	}
