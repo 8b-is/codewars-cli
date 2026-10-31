@@ -99,6 +99,8 @@ func ParseWebhookRequest(r *http.Request, expectedSecret string) (*WebhookEvent,
 			ev.Event = "webhook"
 		case ev.CodeChallenge != nil:
 			ev.Event = "code_challenge"
+		case ev.Solution != nil:
+			ev.Event = "solution"
 		case ev.User != nil:
 			ev.Event = "user"
 		default:
