@@ -135,6 +135,27 @@ func BuildELI5Thread(entry KataEntry, customPosts []string) []string {
 			"⚡ ELI5 Step 2 (Haskell + Julia + Zero-Libc Assembly):\n\n• Haskell (`solution.hs`): `spanRun` + `intercalate \",\"`\n• Julia (`solution.jl`): two-pointer run scanner\n• x86-64 NASM & ARM64 (`solution.asm`, `solution_arm64.s`): pure register `div`/`udiv` ASCII digit streamer!",
 			fmt.Sprintf("✅ Verified across Haskell (GHC 9.14), Julia 1.13, x86-64 NASM & ARM64!\n\n%s\nRepo: %s\n\n#Haskell #JuliaLang #Assembly #Codewars #ELI5", solURL, repoURL),
 		}
+	case "beeramid":
+		return []string{
+			fmt.Sprintf("🍺 ELI5 Kata · Beeramid (SWI-Prolog, 5 kyu)\n\nYou get a referral bonus & buy beer cans to stack a square pyramid: 1 can on top, 4 on level 2, 9 on level 3, L² on level L. How many complete levels fit?\n\n%s", kataURL),
+			"🧱 ELI5 Step 1 (Prolog Tail-Recursive Accumulator):\n\nFirst `Cans is max(0, floor(Bonus / Price))`.\nIn Prolog, loops are tail-recursive predicates! At `Level`, we need `Level * Level` cans. With `( Cans >= Needed -> ... ; Levels is Level - 1 )`, SWI-Prolog runs in O(1) stack with 0 choicepoints!",
+			"📐 ELI5 Step 2 (The O(1) Cube-Root Sandwich):\n\nTotal cans for n levels is P(n) = n(n+1)(2n+1)/6.\nMultiply by 3: for all n >= 1,\n`n³ < 3·P(n) < (n+1)³`!\nSo `K = floor((3·Cans)^(1/3))` is ALWAYS either L or L+1 — one check `K(K+1)(2K+1) <= 6·Cans` solves it in O(1)!",
+			fmt.Sprintf("✅ Verified in SWI-Prolog (`plunit`) across all sample tests, 600 exact boundaries & 2,001 O(1) checks!\n\n%s\nRepo: %s\n\n#Prolog #SWIProlog #Codewars #ELI5", solURL, repoURL),
+		}
+	case "cocoa-vbf-duty-cycle-gate":
+		return []string{
+			fmt.Sprintf("📡 ELI5 Kata · CoCoA VBF + EU868 1%% Duty-Cycle Gate (Rust/SPARK/Prolog, 5 kyu)\n\nWhy do IoT radios lock up when they update their retry timer BEFORE checking the 1%% legal airtime bucket?\n\n%s", kataURL),
+			"🪣 ELI5 Step 1 (Prescaled 100× Bucket & Shift-Add VBF):\n\nInstead of float division, every 1 ms of TX costs 100 units from a 3,600,000 bucket (refills +1/ms).\nCoCoA VBF scales RTO with zero floats:\n• <1s: 3x (`rto + (rto<<1)`)\n• 1..3s: 2x (`rto<<1`)\n• >3s: 1.3x (`(rto*333)>>8`)",
+			"🚦 ELI5 Step 2 (Gate-Before-Mutate Invariant):\n\nIf a timeout fires during an EU868 airtime lockout and you mutate `tx_count` & `rto_current_ms` FIRST, the radio burns retry budget without transmitting!\nChecking `consume_airtime` BEFORE mutating RTO preserves exact retry timing.",
+			fmt.Sprintf("✅ Proved in Ada 2022 SPARK (79/79 gnatprove VCs), #![no_std] Rust & SWI-Prolog!\n\n%s\nRepo: %s\n\n#Rust #AdaSPARK #Prolog #ELI5", solURL, repoURL),
+		}
+	case "ternary-matrix-simd-gemm":
+		return []string{
+			fmt.Sprintf("⚡ ELI5 Kata · Balanced-Ternary Matrix SIMD Contraction (Rust/ARM64/NASM/Prolog, 3 kyu)\n\nHow do you multiply a matrix of trits {-1, 0, +1} packed 5-per-byte (Base-243) without a single multiplication in the inner loop?\n\n%s", kataURL),
+			"📦 ELI5 Step 1 (Base-243 5-Trit Byte Unpacking):\n\nSince 3⁵ = 243 <= 255, 5 balanced trits fit in 1 byte!\nAdd +1 to shift {-1,0,+1} -> {0,1,2}, pack in base 3, and unpack by `/ 3` and `% 3 - 1` into two 2-bit bitplanes: `pos_mask` (+1) and `neg_mask` (-1)!",
+			"🚀 ELI5 Step 2 (Zero-Multiply SIMD Add/Subtract):\n\nIn the inner loop:\n• Trit = +1 → `acc += b`\n• Trit = -1 → `acc -= b`\n• Trit =  0 → do nothing!\nWith ARM64 NEON (`vaddq_s32`/`vsubq_s32`) & x86-64 NASM, 4 lanes update in 1 cycle with 0 multiplies!",
+			fmt.Sprintf("✅ Verified across Rust NEON, ARM64 ASM, x86-64 NASM & SWI-Prolog + 100 SplitMix64 random tests!\n\n%s\nRepo: %s\n\n#Rust #SIMD #Prolog #Codewars #ELI5", solURL, repoURL),
+		}
 	default:
 		return []string{
 			fmt.Sprintf("🧩 ELI5 Kata · %s (%s, %s)\n\nNew verified kata solution landed in 8b-is/space-bender! Let's break down how it works like you're 5 🧵👇\n\n%s", entry.Title, entry.Tier, entry.Language, kataURL),
