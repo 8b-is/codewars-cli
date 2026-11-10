@@ -157,6 +157,7 @@ func inspectKataDir(tier, slug, kataDir string) KataEntry {
 		CodewarsID: KnownKataIDs[slug],
 		Dir:        kataDir,
 	}
+	// Note: Title is currently defaulting to slug; future implementation should parse metadata files.
 
 	readmePath := filepath.Join(kataDir, "README.md")
 	if data, err := os.ReadFile(readmePath); err == nil {
